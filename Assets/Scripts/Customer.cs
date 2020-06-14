@@ -19,7 +19,7 @@ public class Customer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = levelManager.cashierPosition.transform.position;
+        //transform.position = levelManager.cashierPosition.transform.position;
 
 
 
