@@ -15,7 +15,7 @@ public class Constant : MonoBehaviour
         sushis = new List<Sushi>();
         sushis.Add(new Sushi("philadelphia", new List<string>() { "salmon", "avocado", "creamCheese" }));
         sushis.Add(new Sushi("boston", new List<string>() { "shrimp", "avocado", "cucumber" }));
-        sushis.Add(new Sushi("spicyTuna", new List<string>() { "tuna", "spicyMayo" }));
+        sushis.Add(new Sushi("vegetarian", new List<string>() { "carrots", "cucumber", "avocado" }));
         sushis.Add(new Sushi("california", new List<string>() { "crab", "avocado", "cucumber" }));
         sushi_names = new List<string>() { "philadelphia", "boston", "spicyTuna", "california" };
     }

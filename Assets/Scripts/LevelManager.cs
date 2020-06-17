@@ -10,7 +10,6 @@ public class NewSushiEvent : UnityEvent<Sushi>
 {
 }
 
-
 public class LevelManager : MonoBehaviour
 {
     [SerializeField] private Transform areaTransform;
