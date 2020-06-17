@@ -142,7 +142,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833d19d20fe718e41a9711215acf5261, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  assemblageAreaTransform: {fileID: 0}
+  areaTransform: {fileID: 0}
+  ingredientImage: {fileID: 0}
 --- !u!1 &7480263210997578236
 GameObject:
   m_ObjectHideFlags: 0
