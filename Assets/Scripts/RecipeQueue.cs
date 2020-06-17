@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 
 public class RecipeQueue : MonoBehaviour
@@ -43,7 +41,7 @@ public class RecipeQueue : MonoBehaviour
         }
     }
 
-    void AddRecipeView(Order order)
+    void AddRecipeView(Sushi sushi)
     {
         GameObject recipeViewObject = Instantiate(
             recipeViewPrefab,
@@ -55,6 +53,4 @@ public class RecipeQueue : MonoBehaviour
         recipeViewObject.GetComponent<RecipeView>().EnterScene();
         recipeViewList.Add(recipeViewObject);
     }
-
-
 }
