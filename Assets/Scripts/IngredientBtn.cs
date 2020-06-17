@@ -22,12 +22,9 @@ public class IngredientBtn : MonoBehaviour
 
         foreach (var ingredientImg in ingredientImgs)
         {
-            Debug.Log("ingredient to instantiate: " + ingredientImg.name);
             Image newIngredient = Instantiate(ingredientImg, areaTransform);
             newIngredient.transform.position = areaTransform.position;
-            Debug.Log("Pressed mouse upon area: " + transform.parent.name);
-            Debug.Log("Ingredient image initial position: " + newIngredient.transform.position);
-            Debug.Log("Ingredient image final position: " + newIngredient.transform.position);
+
         }
     }
 }

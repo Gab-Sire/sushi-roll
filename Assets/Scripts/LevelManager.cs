@@ -1,84 +1,111 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class LevelManager
+public class LevelManager: MonoBehaviour
 {
-    // Location 
-    public Dictionary<GameObject, GameObject> locations = new Dictionary<GameObject, GameObject>();
-    public GameObject cashierPosition = GameObject.Find("CashierPosition");
-    private string[] recipeNames;
+    [SerializeField] private Transform areaTransform;
+    [SerializeField] private Image board;
+    [SerializeField] private float animationDelay = 2.0f;
 
-    private static LevelManager instance = null;
-    private Queue<Order> ordersToCook { get; }
-    private Queue<Order> ordersToGo { get; }
-    private static int orderId = 0;
+    private List<Sushi> sushiTypes;
+    private List<Sushi> orderedSushis = new List<Sushi>();
+    private List<Sushi> unfinishedSushis = new List<Sushi>();
+    private List<string> assembledIngredients = new List<string>();
 
-    public static LevelManager Instance
+    private void Start()
     {
-        get
+        sushiTypes = InitializeSushiTypes();
+        CreateNewSushi();
+        CreateNewSushi();
+
+        StartCoroutine("PutBoardIntoView");
+    }
+
+    private List<Sushi> InitializeSushiTypes()
+    {
+        List<Sushi> sushis = new List<Sushi>();
+
+        Sushi philadelphia = new Sushi();
+        Sushi boston = new Sushi();
+        Sushi spicyTuna = new Sushi();
+        Sushi california = new Sushi();
+        Sushi dragonRoll = new Sushi();
+
+        List<string> ingredients = new List<string>(){ "salmon", "avocado", "creamCheese" };
+        philadelphia.Ingredients = ingredients;
+
+        ingredients = new List<string>() { "shrimp", "avocado", "cucumber" };
+        boston.Ingredients = ingredients;
+
+        ingredients = new List<string>() { "tuna", "spicyMayo"};
+        spicyTuna.Ingredients = ingredients;
+
+        ingredients = new List<string>() { "crab", "avocado", "cucumber"};
+        california.Ingredients = ingredients;
+
+        ingredients = new List<string>() { "eel", "crab", "cucumber", "eelSauce"};
+        dragonRoll.Ingredients = ingredients;
+
+        sushis.Add(philadelphia);
+        sushis.Add(boston);
+        sushis.Add(spicyTuna);
+        sushis.Add(california);
+        sushis.Add(dragonRoll);
+
+        return sushis;
+    }
+
+    private void CreateNewSushi()
+    {
+        Sushi sushi = sushiTypes[Random.Range(0, sushiTypes.Count)];
+        orderedSushis.Add(sushi);
+    }
+
+    private IEnumerator PutBoardIntoView()
+    {
+        new WaitForSeconds(animationDelay);
+        board.transform.SetParent(areaTransform);
+        board.transform.position = areaTransform.position;
+        yield return new WaitForSeconds(1);
+    }
+
+    public void AddIngredient(string ingredient)
+    {
+        assembledIngredients.Add(ingredient);
+    }
+
+    public void ClearIngredients()
+    {
+        assembledIngredients.Clear();
+    }
+
+    /// <summary>
+    /// Find the first matching sushi against a list of ingredients, and remove it form the ordered sushis
+    /// </summary>
+    public void CheckMatchedSushi()
+    {
+        bool isMatch = true;
+
+        foreach (Sushi sushi in orderedSushis)
         {
-            if (instance == null)
+            if (sushi.Ingredients.Count == assembledIngredients.Count)
             {
-                instance = new LevelManager();
+                foreach (string ingredient in sushi.Ingredients)
+                {
+                    if (!assembledIngredients.Contains(ingredient))
+                    {
+                        isMatch = false;
+                        break;
+                    }
+                }
+                if(isMatch){
+                    orderedSushis.Remove(sushi);
+                    return;
+                }
             }
-            return instance;
         }
-    }
-
-    private LevelManager()
-    {
-        for (int i = 1; i <= 8; i++)
-        {
-            GameObject location = GameObject.Find($"Location {i}");
-            Debug.Log("Name location:" + location.name);
-            locations.Add(location, null);
-        }
-       
-        OrderItemManager.InitializeItemTypes();
-        recipeNames = OrderItemManager.GetRecipeNames();
-
-        // for testing purposes
-
-        //Debug.Log("Recipes available:"  + recipeNames.Length);
-
-        int randomIndex = Random.Range(0, recipeNames.Length);
-        string testRecipe01 = recipeNames[randomIndex];
-        randomIndex = Random.Range(0, recipeNames.Length);
-        string testRecipe02 = recipeNames[randomIndex];
-
-        Order testOrder01 = new Order(orderId++);
-        OrderItemManager.InjectTemplateItemInOrder(testOrder01, testRecipe01);
-        Order testOrder02 = new Order(orderId++);
-        OrderItemManager.InjectTemplateItemInOrder(testOrder02, testRecipe02);
-
-        //Debug.Log("Test order 01: " + testOrder01);
-        //Debug.Log("Test order 02: " + testOrder02);
-
-        ordersToCook = new Queue<Order>();
-        ordersToCook.Enqueue(testOrder01);
-        ordersToCook.Enqueue(testOrder02);
-
-        //Debug.Log("number of order queue elements: " + orders.Count);
-    }
-
-    public GameObject GetEmptyLocation()
-    {
-        foreach (var location in locations)
-        {
-            if (location.Value == null)
-                return location.Key;
-        }
-        return null;
-    }
-
-    public Order GetNextPendingOrder()
-    {
-        return ordersToCook.Dequeue();
-    }
-
-    public void PutCompletedOrder(Order order)
-    {
-        ordersToGo.Enqueue(order);
     }
 }
