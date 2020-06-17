@@ -10,8 +10,7 @@ public class LevelManager
     private string[] recipeNames;
 
     private static LevelManager instance = null;
-    private Queue<Order> ordersToCook { get; }
-    private Queue<Order> ordersToGo { get; }
+    private Queue<Order> orders { get; }
     private static int orderId = 0;
 
     public static LevelManager Instance
@@ -34,7 +33,7 @@ public class LevelManager
             Debug.Log("Name location:" + location.name);
             locations.Add(location, null);
         }
-       
+
         OrderItemManager.InitializeItemTypes();
         recipeNames = OrderItemManager.GetRecipeNames();
 
@@ -55,9 +54,9 @@ public class LevelManager
         //Debug.Log("Test order 01: " + testOrder01);
         //Debug.Log("Test order 02: " + testOrder02);
 
-        ordersToCook = new Queue<Order>();
-        ordersToCook.Enqueue(testOrder01);
-        ordersToCook.Enqueue(testOrder02);
+        orders = new Queue<Order>();
+        orders.Enqueue(testOrder01);
+        orders.Enqueue(testOrder02);
 
         //Debug.Log("number of order queue elements: " + orders.Count);
     }
@@ -70,15 +69,5 @@ public class LevelManager
                 return location.Key;
         }
         return null;
-    }
-
-    public Order GetNextPendingOrder()
-    {
-        return ordersToCook.Dequeue();
-    }
-
-    public void PutCompletedOrder(Order order)
-    {
-        ordersToGo.Enqueue(order);
     }
 }
