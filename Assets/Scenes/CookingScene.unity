@@ -1830,8 +1830,8 @@ MonoBehaviour:
   doneSushiEvent:
     m_PersistentCalls:
       m_Calls: []
-  areaTransform: {fileID: 0}
-  board: {fileID: 0}
+  areaTransform: {fileID: 6679631372716859968}
+  board: {fileID: 531273200}
   animationDelay: 2
   gameStatus: 0
 --- !u!114 &687097332
