@@ -1,21 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour
 {
+    [SerializeField] private Text lastedText;
+
     private GameObject mainMenu;
     private GameObject gameOverMenu;
-    private TextMesh lastedText;
-
-    [SerializeField] private LevelManager levelManager;
+    private LevelManager levelManager;
 
     float timer = 0;
     int minutesPlayed = 0;
 
     public void DisplayGameOver()
     {
-        lastedText.text = $"You lasted {minutesPlayed} minutes";
+        lastedText.text = $"You lasted {(int)(minutesPlayed / 60)} minutes";
         gameOverMenu.SetActive(true);
     }
 
