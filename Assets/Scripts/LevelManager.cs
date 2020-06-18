@@ -5,6 +5,13 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
+public enum GameStatus
+{
+    ReadyToStart,
+    InProgress,
+    GameOver
+}
+
 [System.Serializable]
 public class NewSushiEvent : UnityEvent<Sushi>
 {
@@ -31,23 +38,31 @@ public class LevelManager : MonoBehaviour
     private List<Sushi> unfinishedSushis = new List<Sushi>();
     private List<string> assembledIngredients = new List<string>();
     private List<Image> ingredientImgs = new List<Image>();
+
+    public GameStatus gameStatus = GameStatus.ReadyToStart;
+
     private int sushiCreatedIn = 0;
     private int sushiSpeedCreation = 200;
+
+    public void StartGame()
+    {
+        gameStatus = GameStatus.InProgress;
+    }
 
     private void Start()
     {
         sushiTypes = Constant.sushis;
-        CreateNewSushi();
-        CreateNewSushi();
-
         newSushiEvent = new NewSushiEvent();
         doneSushiEvent = new DoneSushiEvent();
         StartCoroutine("PutBoardIntoView");
+        sushiCreatedIn = 0;
+        sushiSpeedCreation = 200;
     }
 
-    // Test - create new sushi every speedCreation frame
     private void FixedUpdate()
     {
+        if (gameStatus != GameStatus.InProgress)
+            return;
         if (sushiCreatedIn == sushiSpeedCreation)
         {
             CreateNewSushi();
@@ -122,7 +137,7 @@ public class LevelManager : MonoBehaviour
         foreach (Sushi sushi in orderedSushis)
         {
             isMatch = true;
-            
+
             Debug.Log("sushi ingredients count for matching: " + sushi.ingredients.Count);
             Debug.Log("assembled ingredients count for matching: " + assembledIngredients.Count);
 
@@ -161,7 +176,7 @@ public class LevelManager : MonoBehaviour
         {
             Debug.Log("**** sushi is matched outside");
         }
-        
+
     }
 
     public void CompleteSushi(Sushi sushi)
@@ -171,5 +186,9 @@ public class LevelManager : MonoBehaviour
         doneSushiEvent.Invoke(sushi);
     }
 
-    public void GameOver() { }
+    private void GameOver()
+    {
+        gameStatus = GameStatus.GameOver;
+    }
+
 }
