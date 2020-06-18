@@ -27,6 +27,7 @@ public class MenuManager : MonoBehaviour
 
     public void BackBtnHandler()
     {
+        mainMenu.SetActive(true);
         gameOverMenu.SetActive(false);
     }
 
@@ -50,6 +51,7 @@ public class MenuManager : MonoBehaviour
     {
         if (levelManager.gameStatus == GameStatus.GameOver)
         {
+            Debug.Log("Game over menu");
             DisplayGameOver();
             levelManager.gameStatus = GameStatus.ReadyToStart;
         }
