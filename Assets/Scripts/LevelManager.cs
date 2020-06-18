@@ -24,7 +24,6 @@ public class DoneSushiEvent : UnityEvent<Sushi>
 
 public class LevelManager : MonoBehaviour
 {
-
     public NewSushiEvent newSushiEvent;
     public DoneSushiEvent doneSushiEvent;
 
@@ -119,11 +118,10 @@ public class LevelManager : MonoBehaviour
 
         foreach (Image img in ingredientImgs)
         {
-            Debug.Log("destroying image: " + img.name);
             Destroy(img);
         }
         ingredientImgs.Clear();
-        Debug.Log("Ingredients cleared");
+        //Debug.Log("Ingredients cleared");
     }
 
     /// <summary>
@@ -131,29 +129,27 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     public void CheckMatchedSushi()
     {
-        Debug.Log("Checking if a sushi matches..");
+        //Debug.Log("Checking if a sushi matches..");
         bool isMatch = true;
 
         foreach (Sushi sushi in orderedSushis)
         {
             isMatch = true;
-
-            Debug.Log("sushi ingredients count for matching: " + sushi.ingredients.Count);
-            Debug.Log("assembled ingredients count for matching: " + assembledIngredients.Count);
+            
+            //Debug.Log("sushi ingredients count for matching: " + sushi.ingredients.Count);
+            //Debug.Log("assembled ingredients count for matching: " + assembledIngredients.Count);
 
             if (sushi.ingredients.Count == assembledIngredients.Count)
             {
                 foreach (string ingredient in sushi.ingredients)
                 {
-                    Debug.Log("ingredient of sushi: " + ingredient);
-
                     string result = "";
 
                     foreach (string ing in assembledIngredients)
                     {
                         result += " / " + ing;
                     }
-                    Debug.Log("assembled ingredients: " + result);
+                    // Debug.Log("assembled ingredients: " + result);
 
                     if (!assembledIngredients.Contains(ingredient))
                     {
@@ -162,21 +158,15 @@ public class LevelManager : MonoBehaviour
                     }
                 }
             }
-            Debug.Log("isMatch" + isMatch);
 
             if (isMatch)
             {
-                Debug.Log("**** sushi is matched");
+                //Debug.Log("**** sushi is matched");
                 CompleteSushi(sushi);
                 ClearIngredients();
                 return;
             }
         }
-        if (isMatch)
-        {
-            Debug.Log("**** sushi is matched outside");
-        }
-
     }
 
     public void CompleteSushi(Sushi sushi)

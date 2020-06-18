@@ -47,9 +47,11 @@ public class RecipeQueue : MonoBehaviour
     {
         foreach (GameObject view in recipeViewList)
         {
-            if (view.GetComponent<RecipeView>().Sushi.Equals(sushi))
+            if (view != null && view.GetComponent<RecipeView>().Sushi.Equals(sushi))
             {
                 view.GetComponent<RecipeView>().ExitScene();
+                recipeViewList.Remove(view);
+                return;
             }
         }
     }

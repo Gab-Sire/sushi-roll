@@ -23,7 +23,7 @@ public class IngredientBtn : MonoBehaviour
             Image newIngredient = Instantiate(ingredientImg);
             newIngredient.transform.SetParent(areaTransform);
             
-            Debug.Log("new ingredient: " + newIngredient);
+            //Debug.Log("new ingredient: " + newIngredient);
             newIngredient.transform.position = areaTransform.position;
             newIngredient.transform.parent.name = newIngredient.name;
             levelManager.AddIngredient(newIngredient);
