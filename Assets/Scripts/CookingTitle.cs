@@ -9,8 +9,9 @@ public class CookingTitle : MonoBehaviour
         animation = GetComponent<Animation>();
         animation.Play("cooking_intro");
     }
-  void Update()
+
+    void Update()
     {
-        
+
     }
 }

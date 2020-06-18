@@ -17,6 +17,7 @@ public class MenuManager : MonoBehaviour
     public void DisplayGameOver()
     {
         lastedText.text = $"You lasted {(int)(minutesPlayed / 60)} minutes";
+        mainMenu.SetActive(false);
         gameOverMenu.SetActive(true);
     }
 
@@ -24,6 +25,8 @@ public class MenuManager : MonoBehaviour
     {
         levelManager.StartGame();
         mainMenu.SetActive(false);
+        minutesPlayed = 0;
+        timer = 0;
     }
 
     public void QuitBtnHandler()
