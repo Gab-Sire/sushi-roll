@@ -130,17 +130,17 @@ public class LevelManager : MonoBehaviour
     public void CheckMatchedSushi()
     {
         //Debug.Log("Checking if a sushi matches..");
-        bool isMatch = true;
+        bool isMatch = false;
 
         foreach (Sushi sushi in orderedSushis)
         {
-            isMatch = true;
-            
             //Debug.Log("sushi ingredients count for matching: " + sushi.ingredients.Count);
             //Debug.Log("assembled ingredients count for matching: " + assembledIngredients.Count);
 
             if (sushi.ingredients.Count == assembledIngredients.Count)
             {
+                isMatch = true;
+
                 foreach (string ingredient in sushi.ingredients)
                 {
                     string result = "";
