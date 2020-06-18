@@ -6,8 +6,6 @@ public class RecipeQueue : MonoBehaviour
     // Positioning values - Hand written for now
     private float recipeViewLenght = 100;
 
-    int test = 0;
-
     [SerializeField] private GameObject recipeViewPrefab = null;
     private List<GameObject> recipeViewList = new List<GameObject>();
 
@@ -16,7 +14,6 @@ public class RecipeQueue : MonoBehaviour
         LevelManager.GetSelfInstance().newSushiEvent.AddListener(AddRecipeView);
     }
 
-    // Test purpose
     void RandomCompleteOrder()
     {
         if (Random.Range(0, 5) >= 3)
@@ -34,7 +31,7 @@ public class RecipeQueue : MonoBehaviour
     void AddRecipeView(Sushi sushi)
     {
         GameObject recipeViewObject = Instantiate(
-            recipeViewPrefab,
+            Resources.Load($"Sushi Recipe Views/{sushi.name} recipe view") as GameObject,
             transform.position,
             Quaternion.identity
         );
