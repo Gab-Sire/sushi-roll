@@ -6,25 +6,27 @@ public class IngredientBtn : MonoBehaviour
     [SerializeField] private Transform areaTransform;
     [SerializeField] private Image[] ingredientImgs;
 
+    private LevelManager levelManager;
+    private string ingredientName;
+
     void Start()
     {
-
-    }
-
-    void Update()
-    {
-        
+        levelManager = LevelManager.GetSelfInstance();
     }
 
     public void PositionImgsUntoArea()
     {
-        Debug.Log("Area transform: " + areaTransform.position);
+        //Debug.Log("Area transform: " + areaTransform.position);
 
         foreach (var ingredientImg in ingredientImgs)
         {
-            Image newIngredient = Instantiate(ingredientImg, areaTransform);
+            Image newIngredient = Instantiate(ingredientImg);
+            newIngredient.transform.SetParent(areaTransform);
+            
+            Debug.Log("new ingredient: " + newIngredient);
             newIngredient.transform.position = areaTransform.position;
-
+            newIngredient.transform.parent.name = newIngredient.name;
+            levelManager.AddIngredient(newIngredient);
         }
     }
 }

@@ -10,19 +10,27 @@ public class NewSushiEvent : UnityEvent<Sushi>
 {
 }
 
+[System.Serializable]
+public class DoneSushiEvent : UnityEvent<Sushi>
+{
+}
+
 public class LevelManager : MonoBehaviour
 {
+
+    public NewSushiEvent newSushiEvent;
+    public DoneSushiEvent doneSushiEvent;
+
     [SerializeField] private Transform areaTransform;
     [SerializeField] private Image board;
     [SerializeField] private float animationDelay = 2.0f;
 
     private List<Sushi> sushiTypes;
     public List<Sushi> orderedSushis = new List<Sushi>();
+    public List<Sushi> completedSushis = new List<Sushi>();
     private List<Sushi> unfinishedSushis = new List<Sushi>();
     private List<string> assembledIngredients = new List<string>();
-
-    public NewSushiEvent newSushiEvent;
-
+    private List<Image> ingredientImgs = new List<Image>();
     private int sushiCreatedIn = 0;
     private int sushiSpeedCreation = 200;
 
@@ -33,6 +41,7 @@ public class LevelManager : MonoBehaviour
         CreateNewSushi();
 
         newSushiEvent = new NewSushiEvent();
+        doneSushiEvent = new DoneSushiEvent();
         StartCoroutine("PutBoardIntoView");
     }
 
@@ -69,9 +78,15 @@ public class LevelManager : MonoBehaviour
         return camera.GetComponent("LevelManager") as LevelManager;
     }
 
-    public void AddIngredient(string ingredient)
+    public void AddIngredient(Image ingredientImg)
     {
-        assembledIngredients.Add(ingredient);
+        if (ingredientImg.CompareTag("ingredient"))
+        {
+            string ingredientName = ingredientImg.transform.parent.name.Substring(0, ingredientImg.transform.parent.name.IndexOf("_")).ToLower();
+            assembledIngredients.Add(ingredientName);
+            Debug.Log("Added ingredient: " + ingredientName);
+            ingredientImgs.Add(ingredientImg);
+        }
     }
 
     public void UnfinishedSushi(Sushi sushi)
@@ -86,6 +101,14 @@ public class LevelManager : MonoBehaviour
     public void ClearIngredients()
     {
         assembledIngredients.Clear();
+
+        foreach (Image img in ingredientImgs)
+        {
+            Debug.Log("destroying image: " + img.name);
+            Destroy(img);
+        }
+        ingredientImgs.Clear();
+        Debug.Log("Ingredients cleared");
     }
 
     /// <summary>
@@ -93,29 +116,60 @@ public class LevelManager : MonoBehaviour
     /// </summary>
     public void CheckMatchedSushi()
     {
+        Debug.Log("Checking if a sushi matches..");
         bool isMatch = true;
 
         foreach (Sushi sushi in orderedSushis)
         {
+            isMatch = true;
+            
+            Debug.Log("sushi ingredients count for matching: " + sushi.ingredients.Count);
+            Debug.Log("assembled ingredients count for matching: " + assembledIngredients.Count);
+
             if (sushi.ingredients.Count == assembledIngredients.Count)
             {
                 foreach (string ingredient in sushi.ingredients)
                 {
+                    Debug.Log("ingredient of sushi: " + ingredient);
+
+                    string result = "";
+
+                    foreach (string ing in assembledIngredients)
+                    {
+                        result += " / " + ing;
+                    }
+                    Debug.Log("assembled ingredients: " + result);
+
                     if (!assembledIngredients.Contains(ingredient))
                     {
                         isMatch = false;
                         break;
                     }
                 }
-                if (isMatch)
-                {
-                    orderedSushis.Remove(sushi);
-                    return;
-                }
+            }
+            Debug.Log("isMatch" + isMatch);
+
+            if (isMatch)
+            {
+                Debug.Log("**** sushi is matched");
+                CompleteSushi(sushi);
+                ClearIngredients();
+                return;
             }
         }
+        if (isMatch)
+        {
+            Debug.Log("**** sushi is matched outside");
+        }
+        
+    }
+
+    public void CompleteSushi(Sushi sushi)
+    {
+        completedSushis.Add(sushi);
+        orderedSushis.Remove(sushi);
+        doneSushiEvent.Invoke(sushi);
     }
 
     public void GameOver() { }
-
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RecipeView : MonoBehaviour
 {
@@ -12,7 +10,10 @@ public class RecipeView : MonoBehaviour
     private int destroyIn = 100;
     private Sushi sushi;
 
-    [SerializeField] LevelManager levelManager;
+    public Sushi Sushi { get => sushi; }
+    public void SetSushi(Sushi Sushi) { sushi = Sushi; }  // Use setter instead
+
+    private LevelManager levelManager;
 
     void Start()
     {
@@ -20,9 +21,7 @@ public class RecipeView : MonoBehaviour
         levelManager = LevelManager.GetSelfInstance();
     }
 
-    public void SetSushi(Sushi Sushi) { sushi = Sushi; }  // Use setter instead
-
-    void FixedUpdate()
+    void Update()
     {
         if (hasEnter)
             transform.Translate(Vector3.right * Time.deltaTime * speed);

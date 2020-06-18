@@ -3,15 +3,16 @@ using UnityEngine;
 
 public class RecipeQueue : MonoBehaviour
 {
+    [SerializeField] private GameObject recipeViewPrefab = null;
+
+    private List<GameObject> recipeViewList = new List<GameObject>();
     // Positioning values - Hand written for now
     private float recipeViewLenght = 100;
-
-    [SerializeField] private GameObject recipeViewPrefab = null;
-    private List<GameObject> recipeViewList = new List<GameObject>();
 
     void Start()
     {
         LevelManager.GetSelfInstance().newSushiEvent.AddListener(AddRecipeView);
+        LevelManager.GetSelfInstance().doneSushiEvent.AddListener(ExitRecipeView);
     }
 
     void RandomCompleteOrder()
@@ -40,5 +41,16 @@ public class RecipeQueue : MonoBehaviour
         recipeViewObject.GetComponent<RecipeView>().EnterScene();
         recipeViewObject.GetComponent<RecipeView>().SetSushi(sushi);
         recipeViewList.Add(recipeViewObject);
+    }
+
+    void ExitRecipeView(Sushi sushi)
+    {
+        foreach (GameObject view in recipeViewList)
+        {
+            if (view.GetComponent<RecipeView>().Sushi.Equals(sushi))
+            {
+                view.GetComponent<RecipeView>().ExitScene();
+            }
+        }
     }
 }
