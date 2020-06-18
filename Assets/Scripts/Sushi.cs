@@ -2,6 +2,13 @@
 
 public class Sushi
 {
-    private List<string> ingredients;
-    public List<string> Ingredients { get { return ingredients; } set { ingredients = value; } }
+    public List<string> ingredients;
+    public string name;
+
+    public Sushi(string Name, List<string> Ingredients)
+    {
+        name = Name;
+        ingredients = Ingredients;
+    }
+
 }

@@ -10,11 +10,17 @@ public class RecipeView : MonoBehaviour
     private bool hasEnter = false;
     private bool exit = false;
     private int destroyIn = 100;
+    private Sushi sushi;
+
+    [SerializeField] LevelManager levelManager;
 
     void Start()
     {
         endOfQueueObject = GameObject.Find("End Of Queue");
+        levelManager = LevelManager.GetSelfInstance();
     }
+
+    public void SetSushi(Sushi Sushi) { sushi = Sushi; }  // Use setter instead
 
     void FixedUpdate()
     {
@@ -32,6 +38,8 @@ public class RecipeView : MonoBehaviour
             // This mean the  player didn't complete the order in time
             // Call level manager to report
             Debug.Log("Reach the end !!!!");
+            levelManager.UnfinishedSushi(sushi);
+            Destroy(gameObject);
         }
     }
 
@@ -43,8 +51,6 @@ public class RecipeView : MonoBehaviour
 
     public bool CheckAtEnd()
     {
-
-        Debug.Log(endOfQueueObject);
         return (transform.position.x >= endOfQueueObject.transform.position.x);
     }
 }

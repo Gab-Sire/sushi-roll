@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-
 public class RecipeQueue : MonoBehaviour
 {
     // Positioning values - Hand written for now
@@ -9,25 +8,16 @@ public class RecipeQueue : MonoBehaviour
 
     int test = 0;
 
-    [SerializeField]
-    GameObject recipeViewPrefab = null;
+    [SerializeField] private GameObject recipeViewPrefab = null;
+    private List<GameObject> recipeViewList = new List<GameObject>();
 
-    List<GameObject> recipeViewList = new List<GameObject>();
-
-    // Update is called once per frame
-    void FixedUpdate()
+    void Start()
     {
-        if (test == 200)
-        {
-            AddRecipeView(null);
-            test = 0;
-            randomCompleteOrder();
-        }
-        test += 1;
+        LevelManager.GetSelfInstance().newSushiEvent.AddListener(AddRecipeView);
     }
 
     // Test purpose
-    void randomCompleteOrder()
+    void RandomCompleteOrder()
     {
         if (Random.Range(0, 5) >= 3)
         {
@@ -51,6 +41,7 @@ public class RecipeQueue : MonoBehaviour
         recipeViewObject.transform.SetParent(transform);
         recipeViewObject.transform.localPosition = new Vector3(-400, 0, 0);
         recipeViewObject.GetComponent<RecipeView>().EnterScene();
+        recipeViewObject.GetComponent<RecipeView>().SetSushi(sushi);
         recipeViewList.Add(recipeViewObject);
     }
 }
