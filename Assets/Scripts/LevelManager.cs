@@ -5,6 +5,13 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
+public enum GameStatus
+{
+    ReadyToStart,
+    InProgress,
+    GameOver
+}
+
 [System.Serializable]
 public class NewSushiEvent : UnityEvent<Sushi>
 {
@@ -22,23 +29,29 @@ public class LevelManager : MonoBehaviour
     private List<string> assembledIngredients = new List<string>();
 
     public NewSushiEvent newSushiEvent;
+    public GameStatus gameStatus = GameStatus.ReadyToStart;
 
     private int sushiCreatedIn = 0;
     private int sushiSpeedCreation = 200;
 
+    public void StartGame()
+    {
+        gameStatus = GameStatus.InProgress;
+    }
+
     private void Start()
     {
         sushiTypes = Constant.sushis;
-        CreateNewSushi();
-        CreateNewSushi();
-
         newSushiEvent = new NewSushiEvent();
         StartCoroutine("PutBoardIntoView");
+        sushiCreatedIn = 0;
+        sushiSpeedCreation = 200;
     }
 
-    // Test - create new sushi every speedCreation frame
     private void FixedUpdate()
     {
+        if (gameStatus != GameStatus.InProgress)
+            return;
         if (sushiCreatedIn == sushiSpeedCreation)
         {
             CreateNewSushi();
@@ -116,6 +129,9 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public void GameOver() { }
+    private void GameOver()
+    {
+        gameStatus = GameStatus.GameOver;
+    }
 
 }
