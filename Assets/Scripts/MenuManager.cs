@@ -64,9 +64,11 @@ public class MenuManager : MonoBehaviour
             DisplayGameOver();
             levelManager.gameStatus = GameStatus.ReadyToStart;
         }
-
-        timer += Time.deltaTime;
-        if ((int)timer % 60 == 0)
-            minutesPlayed += 1;
+        else if (levelManager.gameStatus == GameStatus.InProgress)
+        {
+            timer += Time.deltaTime;
+            if ((int)timer % 60 == 0)
+                minutesPlayed += 1;
+        }
     }
 }
