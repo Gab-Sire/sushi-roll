@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class MenuManager : MonoBehaviour
 {
-    GameObject mainMenu;
-    GameObject gameOverMenu;
+    private GameObject mainMenu;
+    private GameObject gameOverMenu;
+    private TextMesh lastedText;
 
-    LevelManager levelManager;
+    [SerializeField] private LevelManager levelManager;
+
+    float timer = 0;
+    int minutesPlayed = 0;
 
     public void DisplayGameOver()
     {
+        lastedText.text = $"You lasted {minutesPlayed} minutes";
         gameOverMenu.SetActive(true);
     }
 
@@ -55,5 +60,9 @@ public class MenuManager : MonoBehaviour
             DisplayGameOver();
             levelManager.gameStatus = GameStatus.ReadyToStart;
         }
+
+        timer += Time.deltaTime;
+        if ((int)timer % 60 == 0)
+            minutesPlayed += 1;
     }
 }
